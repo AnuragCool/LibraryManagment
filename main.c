@@ -1,8 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include<conio.h>
-#include <dos.h>
+#include <time.h>
 
 typedef struct Book {
 	char name[20];
@@ -19,8 +18,6 @@ typedef struct IssuedBook {
 	char bookid[10];
 	char issueDate[20];
 }IssuedBook;
-
-
 
 
 void ViewBooks(){
@@ -181,7 +178,8 @@ void IssueBooks(){
                         scanf("%s",b1.name);
                         strcpy(b1.USN,usn);
                         strcpy(b1.bookid,bookid);
-                        strcpy(b1.issueDate,"12/12/20");
+                        printf("\n Enter date of Issue(dd/mm/yyyy) : ");
+                        scanf("%s",b1.issueDate);
                         fprintf(fp1,"%s\t%s\t%s\t%s\n",b1.name,b1.USN,b1.bookid,b1.issueDate);
                         fprintf(fp2,"%s\t%s\t%s\t%s\t%d\t%d\n",b.name,b.bookid,b.author,b.dept,b.quantity-1,b.issued+1);
                         printf(" \n Book Issued Successfully!!");
@@ -285,7 +283,7 @@ void ReturnBook(){
         rename("temp1","Books");
         remove("Issued");
         rename("temp","Issued");
-        printf("\n Successfully Returned Book with BookID %s\n-----------------------------------------------.",bookid);
+        printf("\n Successfully Returned Book with BookID %s\n",bookid);
     }else{
         return;
     }
@@ -302,12 +300,13 @@ void DisplayRecords(char USN[20]){
 	Book b;
 	int flag=0;
 	FILE *fp,*fp1;
-	fp = fopen("Issued","r");
+	fp = fopen("Issued","a+");
 	if(fp==NULL){
 		printf(" \n Error in Opening File\n");
 		exit(0);
 	}
 	else{
+        rewind(fp);
         while(fscanf(fp,"%s%s%s%s",b1.name,b1.USN,b1.bookid,b1.issueDate)!=EOF){
                 if(strcmp(USN,b1.USN)==0){
                     flag=1;
@@ -412,7 +411,7 @@ void displayLibrarianOption(){
 
 int main(){
 	int choice;
-	printf("                                LIBRARY MANAGMENT\n\n");
+	printf("                                         LIBRARY MANAGEMENT\n\n");
 	while(1){
 	printf("\n Select From the Options \n\n 1.Student\n 2.Librarian\n 3.Exit\n\n");
 
@@ -422,9 +421,9 @@ int main(){
 	switch(choice){
 
 		case 1: displayStudentOption();
-			break;
+                break;
 		case 2:displayLibrarianOption();
-			break;
+                break;
 		case 3: exit(0);
 		        break;
 		default:printf(" \n Invalid Choice\n\n ");
